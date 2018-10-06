@@ -1,6 +1,6 @@
 ---
-genPolicy: "Create"
-openAPISpec: "http://13.56.210.25/v2/api-docs"
+genPolicy: "None"
+openAPISpec: "http://18.144.38.115:8090/v2/api-docs"
 generators:
 - type: "no_params"
   assertions:
@@ -21,24 +21,75 @@ generators:
     value: "1000"
     methods: "Get"
     denyRoles: null
+    allowRoles: null
     pathPatterns: "/**"
     resourceSamples: null
     queryParams: null
     bodyProperties: null
 - type: "anonymous_invalid"
   assertions:
-  - "@StatusCode != 200"
+  - "@StatusCode == 401 OR @StatusCode == 403"
   severity: null
   database: null
   inactive: false
-  matches: []
+  matches:
+  - name: null
+    value: null
+    methods: null
+    denyRoles: null
+    allowRoles: null
+    pathPatterns: "Get:/api/v1/user-signup/**"
+    resourceSamples: null
+    queryParams: null
+    bodyProperties: null
 - type: "auth_invalid"
   assertions:
-  - "@StatusCode != 200"
+  - "@StatusCode == 401 OR @StatusCode == 403"
   severity: null
   database: null
   inactive: false
-  matches: []
+  matches:
+  - name: null
+    value: null
+    methods: null
+    denyRoles: null
+    allowRoles: null
+    pathPatterns: "Get:/api/v1/user-signup/**"
+    resourceSamples: null
+    queryParams: null
+    bodyProperties: null
+- type: "auth_invalid_empty"
+  assertions:
+  - "@StatusCode == 401 OR @StatusCode == 403"
+  severity: null
+  database: null
+  inactive: false
+  matches:
+  - name: null
+    value: null
+    methods: null
+    denyRoles: null
+    allowRoles: null
+    pathPatterns: ""
+    resourceSamples: null
+    queryParams: null
+    bodyProperties: null
+- type: "auth_invalid_sql"
+  assertions:
+  - "@StatusCode == 401 OR @StatusCode == 403"
+  severity: null
+  database: null
+  inactive: false
+  matches:
+  - name: null
+    value: null
+    methods: null
+    denyRoles: null
+    allowRoles: null
+    pathPatterns: ""
+    resourceSamples: null
+    queryParams: null
+    bodyProperties: null
 - type: "rbac"
   assertions:
   - "@StatusCode == 403"
@@ -50,6 +101,7 @@ generators:
     value: null
     methods: "Post, Put, Delete"
     denyRoles: "Writer, Reader"
+    allowRoles: "Admin"
     pathPatterns: "/api/v1/orgs/**, /api/v1/accounts/**"
     resourceSamples: null
     queryParams: null
@@ -58,6 +110,7 @@ generators:
     value: null
     methods: "Post, Put, Delete"
     denyRoles: "Reader"
+    allowRoles: "Writer"
     pathPatterns: "/api/v1/projects/**, /api/v1/regions/**"
     resourceSamples: null
     queryParams: null
@@ -66,6 +119,7 @@ generators:
     value: null
     methods: "Post, Delete"
     denyRoles: "Collaborator"
+    allowRoles: "Reader, Writer"
     pathPatterns: "/api/v1/projects/**"
     resourceSamples: null
     queryParams: null
@@ -74,6 +128,7 @@ generators:
     value: null
     methods: "Get, Post, Put, Delete"
     denyRoles: "Other"
+    allowRoles: "Reader, Writer"
     pathPatterns: "/api/v1/**"
     resourceSamples: null
     queryParams: null
@@ -90,21 +145,11 @@ generators:
     value: null
     methods: null
     denyRoles: null
+    allowRoles: null
     pathPatterns: null
     resourceSamples: null
     queryParams: null
     bodyProperties: null
-- type: "sql_injection_timebound"
-  assertions:
-  - "@ResponseTime > 7000"
-  - "@ResponseTime < 10000"
-  - "@StatusCode != 404"
-  severity: null
-  database:
-    name: "MySQL"
-    version: "5.7"
-  inactive: false
-  matches: []
 - type: "XSS_Injection"
   assertions:
   - "@StatusCode != 200"
@@ -113,6 +158,16 @@ generators:
   - "@StatusCode != 500"
   severity: null
   database: null
+  inactive: false
+  matches: []
+- type: "sql_injection_timebound"
+  assertions:
+  - "@ResponseTime < 7000 OR @ResponseTime > 10000"
+  - "@StatusCode != 404"
+  severity: null
+  database:
+    name: "MySQL"
+    version: "5.7"
   inactive: false
   matches: []
 - type: "log_Forging"
