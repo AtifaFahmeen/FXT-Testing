@@ -15,13 +15,16 @@ headers:
 - "Content-Type: application/json"
 testCases: []
 assertions:
-- "@ResponseTime < 7000 OR @ResponseTime > 10000"
 - "@StatusCode != 404"
+- "@ResponseTime < 7000 OR @ResponseTime > 10000"
 cleanup: []
 severity: "Major"
 category: "SQL_Injection"
 tags:
 - "V1"
+- "OWASP A1"
+- "[PCI DSS 3.0] 6.5.1"
+- "OWASP - OTG-INPVAL-005"
 inactive: false
 policies:
   initExec: "Request"
